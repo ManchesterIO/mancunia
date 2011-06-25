@@ -1,0 +1,53 @@
+This is the site for the mancunia.mobi spin of Molly
+
+Getting Started
+---------------
+
+1. If you have any site specific configuration, you can put that in
+   settings_local.py and then this will be imported at the end of the regular
+   settings.py, therefore overriding any existing settings.py that exists.
+
+2. Add your API keys to secrets.py
+
+Now deploy following the Molly docs (http://docs.mollyproject.org)
+
+Submodules
+----------
+
+In order to keep particular deployments of mancunia.mobi against particular
+versions of Molly (i.e., have a stable branch which is against a particular
+stable tag of Molly), we use Git submodules. These aren't immediately obvious
+in the way they work. The important thing to remember is that submodules don't
+refer to branches, they refer to *commits*. So, the mollyproject/ folder does
+not always refer to the HEAD of the particular branch it refers to.
+
+You have to therefore update the mollyproject checkout inside the repository
+(yes, it's confusing). You can do this by:
+
+    cd mollyproject
+    git pull
+    cd ..
+    git add mollyproject
+    git commit -m "updated mollyproject"
+    git push
+
+Similarly, if you want to branch master (e.g., have a stable branch) which
+refers to a particular version of Molly (e.g., a stable tag), then:
+
+    cd mollyproject
+    git checkout tag-name
+    cd ..
+    git add mollyproject
+    git commit -m "updated mollyproject"
+    git push
+
+Now, just to make it even more confusing, a git pull doesn't automatically
+update the submodules in the project, so you also have to do:
+
+    git submodule update
+
+And on a fresh clone, don't forget
+
+    git submodule init
+
+
