@@ -1,4 +1,3 @@
 *.pyc
 *.komodoproject
 settings_local.py
-secrets.py

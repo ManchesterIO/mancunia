@@ -17,9 +17,6 @@ import os, os.path, imp
 from molly.conf.settings import Application, extract_installed_apps, Authentication, ExtraBase, Provider
 from molly.utils.media import get_compress_groups
 
-# Get our secrets
-from mancunia.secrets import *
-
 # The following creates two useful variables - a path to where Molly is
 # installed, and also to the root of where your site is installed. These can be
 # used in place of absolute URLs so you can move your installation around
@@ -62,13 +59,13 @@ DATABASES = {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         
         # The name of the database to connect to
-        'NAME': SECRETS['dbname'],
+        'NAME': 'molly',
         
         # The username to connect as
-        'USER': SECRETS['dbuser'],
+        'USER': 'molly',
         
         # The password to connect with
-        'PASSWORD': SECRETS['dbpass'],
+        'PASSWORD': '',
         
         # The address of the database server - an empty string = localhost
         'HOST': '',
@@ -206,7 +203,8 @@ COMPRESS = not DEBUG
 COMPRESS_VERSION = True
 
 # Make this unique, and don't share it with anybody. It's used to salt passwords
-SECRET_KEY = SECRETS['key']
+#SECRET_KEY = SECRETS['key']
+# Skipping, because we want to override this in settings_local.py
 
 # This list is used to specifiy which classes are used to help Django find
 # templates to be rendered. In most circumstances, there is no reason to change
@@ -235,7 +233,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware', # This enables i18n support in Molly (required)
     'molly.utils.middleware.ErrorHandlingMiddleware', # This enables Molly's error handling and reporting framework
     'django.contrib.auth.middleware.AuthenticationMiddleware', # This allows for users to be logged in in Django (required)
-    'molly.auth.middleware.SecureSessionMiddleware', # This adds the capability to have secure sessions (sessions which are HTTPS only)
+    #'molly.auth.middleware.SecureSessionMiddleware', # This adds the capability to have secure sessions (sessions which are HTTPS only)
     #'molly.apps.stats.middleware.StatisticsMiddleware', # This enables Molly's built in hit logging
     'molly.url_shortener.middleware.URLShortenerMiddleware', # This enables Molly's URL shortening functionality
 )
@@ -275,16 +273,17 @@ CSRF_FAILURE_VIEW = 'molly.utils.views.CSRFFailureView'
 LOGGING_CONFIG = None
 
 # This is used to store API keys for various external services that Molly uses
-API_KEYS = {
-    
-    # This is used for geocoding and location settings. You can obtain an API
-    # key by registering at Cloudmade.com and then going to your user profile
-    # page: http://cloudmade.com/user/show
-    'cloudmade': SECRETS['cloudmade'],
-    
-    # This is the web property ID for your Google Analytics account
-    'google_analytics': SECRETS['google-analytics'],
-}
+#API_KEYS = {
+#    
+#    # This is used for geocoding and location settings. You can obtain an API
+#    # key by registering at Cloudmade.com and then going to your user profile
+#    # page: http://cloudmade.com/user/show
+#    'cloudmade': SECRETS['cloudmade'],
+#    
+#    # This is the web property ID for your Google Analytics account
+#    'google_analytics': SECRETS['google-analytics'],
+#}
+# Skipping this because we should define this in settings_local
 
 # Each entity has a primary identifier which is used to generate the absolute
 # URL of the entity page. We can define a list of identifier preferences, so
