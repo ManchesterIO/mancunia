@@ -569,7 +569,7 @@ APPLICATIONS = [
             'bus': ('bus-stop', 5),
             
             # This shows the 3 nearest tram stops
-            'metrolink': ('metrolink-stop', 3),
+            'metrolink': ('metrolink-station', 3),
         },
         
         # When set, then this shows the park and rides specified below on the
@@ -819,66 +819,6 @@ APPLICATIONS = [
     #    # considering if two different user sessions are indeed the same (single
     #    # sign on for linked services)
     #    unify_identifiers = ('weblearn:id',),
-    #),
-
-    # This enables mobile integration with the Sakai VLE
-    #Application('molly.apps.sakai', 'sakai', 'Sakai',
-    #    
-    #    # This is the hostname of the Sakai endpoint to connect to
-    #    host = 'https://sakai.example.ac.uk/',
-    #    
-    #    # This is the name which shows up in the manage authentication screen
-    #    service_name = 'Sakai',
-    #    
-    #    # This limits access to this service to HTTPS only
-    #    secure = True,
-    #    
-    #    # The following list defines which Sakai tools are exposed to users, and
-    #    # the publicly facing name which is used
-    #    tools = [
-    #        ('signup', 'Sign-ups'),
-    #        ('poll', 'Polls'),
-    #        ('direct', 'User information'),
-    #        ('sites', 'Sites'),
-    #        ('evaluation', 'Surveys'),
-    #    ],
-    #    
-    #    # The following enables OAuth integration between Sakai and Molly. Any
-    #    # custom apps wishing to use OAuth can follow this template
-    #    extra_bases = (
-    #        ExtraBase('molly.auth.oauth.views.OAuthView',
-    #            # This should be your OAuth secret token
-    #            secret = '',
-    #            
-    #            # This is how the OAuth request is signed
-    #            signature_method = OAuthSignatureMethod_PLAINTEXT(),
-    #            
-    #            # This is the base URL to the OAuth endpoint
-    #            base_url = 'https://weblearn.ox.ac.uk/oauth-tool/',
-    #            
-    #            # The following 3 settings define what should be appended to the
-    #            # URL above to get the request token, access token and authorise
-    #            # endpoints, respectively
-    #            request_token_url = 'request_token',
-    #            access_token_url = 'access_token',
-    #            authorize_url = 'authorize',
-    #        ),
-    #    ),
-    #    
-    #    # When set to True, this means that users will be logged out after a
-    #    # period of inactivity. When False, they will stay logged in until they
-    #    # manually log out
-    #    enforce_timeouts = False,
-    #    
-    #    # The following defines the mapping between Sakai user identifiers and
-    #    # Molly user identifiers
-    #    identifiers = (
-    #        ('oxford:sso', ('props', 'aid',)),
-    #        ('weblearn:id', ('id',)),
-    #        ('oxford:oss', ('props', 'oakOSSID',)),
-    #        ('oxford:ldap', ('props', 'udp.dn',)),
-    #        ('weblearn:email', ('email',)),
-    #    ),
     #),
     
     # This app allows for users to favourite pages which can then be jumped to
