@@ -132,7 +132,7 @@ MEDIA_URL = '/site-media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # This defaults to the 'compiled_media' folder in your project.
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'compiled_media')
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'compiled_media/')
 
 # URL prefix for static files - this is the address that Molly expects your
 # static files to be served from. Apache should be set up to serve the directory
@@ -168,34 +168,24 @@ STATICFILES_DIRS = (
     ('markers', MARKER_DIR),
 )
 
-# This defines where files should be found to be compressed - this should be
-# the folder all the collected media is stored in
-COMPRESS_SOURCE = STATIC_ROOT
-
-# This defines where all the compressed files should be stored. You'll want this
-# to be in the same place as above
-COMPRESS_ROOT = STATIC_ROOT
-
-# This is the URL where the compressed files are expected to be served from. If
-# you're saving them in the same place as your regular media (the recommended)
-# default, then they're available in the same place
-COMPRESS_URL = STATIC_URL
+PIPELINE_VERSION = True
+PIPELINE_AUTO = False
 
 # This uses a Molly convenience function to find the CSS and JS to be compressed
 # and which should be concatenated together
-COMPRESS_CSS, COMPRESS_JS = get_compress_groups(STATIC_ROOT)
+PIPELINE_CSS, PIPELINE_JS = get_compress_groups(STATIC_ROOT)
 
 # This determines how the CSS should be compressed
 # CSS filter is custom-written since the provided one mangles it too much
-COMPRESS_CSS_FILTERS = ('molly.utils.compress.MollyCSSFilter',)
+PIPELINE_CSS_COMPRESSOR = 'molly.utils.compress.MollyCSSFilter'
 
 # This determines how the JavaScript should be compressed
-COMPRESS_JS_FILTERS = ('compress.filters.jsmin.JSMinFilter',)
+PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.jsmin.JSMinCompressor'
 
 # This settings sets whether or not compression is enabled
 # In order to help with debugging, then this is only enabled when debugging is
 # off
-COMPRESS = not DEBUG
+PIPELINE = not DEBUG
 
 # When set, then a version number is added to compressed files, this means
 # changing a file also changes its URL - when combined with far future expires,
@@ -821,6 +811,10 @@ APPLICATIONS = [
     Application('molly.favourites', 'favourites', 'Favourite pages',
         display_to_user = False,
     ),
+    
+    Application('molly.routing', 'routing', 'Routing',
+        display_to_user = False,
+    ),
 
 ]
 
@@ -835,7 +829,7 @@ INSTALLED_APPS = extract_installed_apps(APPLICATIONS) + (
     'django.contrib.comments', # Django's comments API - used in the feature vote app
     'molly.batch_processing', # This is a part of Molly that handles the batch jobs
     'django.contrib.staticfiles', # Staticfiles handles media for Molly
-    'compress', # Compress is an external library that minifies JS and CSS
+    'pipeline', # Compress is an external library that minifies JS and CSS
     'south', # South handles changes to database schema
 )
 
