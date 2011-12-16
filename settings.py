@@ -226,6 +226,7 @@ MIDDLEWARE_CLASSES = (
     #'molly.auth.middleware.SecureSessionMiddleware', # This adds the capability to have secure sessions (sessions which are HTTPS only)
     #'molly.apps.stats.middleware.StatisticsMiddleware', # This enables Molly's built in hit logging
     'molly.url_shortener.middleware.URLShortenerMiddleware', # This enables Molly's URL shortening functionality
+    'molly.utils.middleware.LocationMiddleware',
 )
 
 # This list specifies "context processors" which add things to the context which
@@ -313,23 +314,23 @@ APPLICATIONS = [
 
     # The desktop page - users with desktop browsers are redirected here to
     # see more information about the app
-    Application('molly.apps.desktop', 'desktop', 'Desktop',
-        display_to_user = False,
-        
-        # A stream of tweets can be shown on the desktop page. If this is set,
-        # then this feed is fetched and shown. To disable this functionality,
-        # just comment out the next line.
-        twitter_username = 'mancuniamobi',
-        
-        # When this is set, any tweets which contain this URL are filtered out
-        # of being displayed - the aim of this is if blog entries are fed into
-        # your tweets, then you don't get duplication between showing your blog
-        # feed and your feed of tweets
-        twitter_ignore_urls = 'http://wp.me',
-        
-        # If set, then an RSS feed is fetched and rendered on the front page
-        blog_rss_url = 'http://mancuniamobi.wordpress.com/feed/',
-    ),
+    #Application('molly.apps.desktop', 'desktop', 'Desktop',
+    #    display_to_user = False,
+    #    
+    #    # A stream of tweets can be shown on the desktop page. If this is set,
+    #    # then this feed is fetched and shown. To disable this functionality,
+    #    # just comment out the next line.
+    #    twitter_username = 'mancuniamobi',
+    #    
+    #    # When this is set, any tweets which contain this URL are filtered out
+    #    # of being displayed - the aim of this is if blog entries are fed into
+    #    # your tweets, then you don't get duplication between showing your blog
+    #    # feed and your feed of tweets
+    #    twitter_ignore_urls = 'http://wp.me',
+    #    
+    #    # If set, then an RSS feed is fetched and rendered on the front page
+    #    blog_rss_url = 'http://mancuniamobi.wordpress.com/feed/',
+    #),
 
     # Places is used to store a location database and can be used find places
     # This is required by the transport and library apps
@@ -809,6 +810,10 @@ APPLICATIONS = [
     # immediately from the front page, or rendered on the nearby page. It has no
     # configuration.
     Application('molly.favourites', 'favourites', 'Favourite pages',
+        display_to_user = False,
+    ),
+    
+    Application('molly.routing', 'routing', 'Routing',
         display_to_user = False,
     ),
     
