@@ -447,6 +447,8 @@ APPLICATIONS = [
             Provider('molly.apps.places.providers.AtcoCifTimetableProvider',
                 url = 'http://store.datagm.org.uk/sets/TfGM/GMPTE_CIF.zip'
             ),
+            
+            Provider('molly.apps.places.providers.TimetableAnnotationProvider'),
         ],
         
         # This setting can be used to associate entities with each other. At
