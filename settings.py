@@ -16,6 +16,7 @@ from oauth.oauth import OAuthSignatureMethod_PLAINTEXT
 import os, os.path, imp
 from molly.conf.settings import Application, extract_installed_apps, Authentication, ExtraBase, Provider
 from molly.utils.media import get_compress_groups
+import local_secrets
 
 # The following creates two useful variables - a path to where Molly is
 # installed, and also to the root of where your site is installed. These can be
@@ -431,9 +432,9 @@ APPLICATIONS = [
             # service, which can be obtained by contacting National Rail:
             # http://realtime.nationalrail.co.uk/ldbws/
             
-            #Provider('molly.apps.places.providers.LiveDepartureBoardPlacesProvider',
-            #    token = ''
-            #),
+            Provider('molly.apps.places.providers.LiveDepartureBoardPlacesProvider',
+                token = local_secrets.LDB
+            ),
             
             # The following provider uses the BBC TPEG feeds to import travel
             # alerts. Please note that the BBC appear to have discontinued these
