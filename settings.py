@@ -14,7 +14,7 @@
 # skip it:
 from oauth.oauth import OAuthSignatureMethod_PLAINTEXT
 import os, os.path, imp
-from molly.conf.settings import Application, extract_installed_apps, Authentication, ExtraBase, Provider
+from molly.conf.settings import Application, extract_installed_apps, Authentication, ExtraBase, ProviderConf
 from molly.utils.media import get_compress_groups
 from mancunia import local_secrets
 
@@ -343,7 +343,7 @@ APPLICATIONS = [
             # The NaPTAN is the database of 'Public Transport Access Nodes',
             # that is, places on the public transport network, e.g., train
             # stations, bus stops, etc...
-            Provider('molly.apps.places.providers.NaptanMapsProvider',
+            ProviderConf('molly.apps.places.providers.NaptanMapsProvider',
                 # This specifies which areas of the NaPTAN are to be imported.
                 # The full list of codes is available at http://www.dft.gov.uk/naptan/smsPrefixes.htm
                 # and the 'ATCO' column is the relevant code here. Also available
@@ -355,7 +355,7 @@ APPLICATIONS = [
             
             # The postcode importer uses the CodePoint Open database to import
             # postcode areas.
-            Provider('molly.apps.places.providers.PostcodesMapsProvider',
+            ProviderConf('molly.apps.places.providers.PostcodesMapsProvider',
                 
                 # This is the path to where the CodePoint Open file lives on
                 # disk. If this file doesn't exist, it is created by downloading
@@ -398,7 +398,7 @@ APPLICATIONS = [
             
             # This provider uses OpenStreetMap data to provide points of
             # interest for the places app.
-            Provider('molly.apps.places.providers.OSMMapsProvider',
+            ProviderConf('molly.apps.places.providers.OSMMapsProvider',
                      
                      # The following specify a bounding box for the OSM data
                      # to be imported. It uses decimal latitude and longitude
@@ -432,7 +432,7 @@ APPLICATIONS = [
             # service, which can be obtained by contacting National Rail:
             # http://realtime.nationalrail.co.uk/ldbws/
             
-            Provider('molly.apps.places.providers.LiveDepartureBoardPlacesProvider',
+            ProviderConf('molly.apps.places.providers.LiveDepartureBoardPlacesProvider',
                 token = local_secrets.LDB
             ),
             
@@ -445,11 +445,15 @@ APPLICATIONS = [
             #    url='http://www.bbc.co.uk/travelnews/tpeg/en/local/rtm/oxford_tpeg.xml',
             #),
             
-            Provider('molly.apps.places.providers.AtcoCifTimetableProvider',
+            ProviderConf('molly.apps.places.providers.AtcoCifTimetableProvider',
                 url = 'http://store.datagm.org.uk/sets/TfGM/GMPTE_CIF.zip'
             ),
             
-            Provider('molly.apps.places.providers.TimetableAnnotationProvider'),
+            ProviderConf('molly.apps.places.providers.cif.CifTimetableProvider',
+                filename = '/home/chris/Downloads/ttf597/TTISF597.MCA'
+            ),
+            
+            ProviderConf('molly.apps.places.providers.TimetableAnnotationProvider'),
         ],
         
         # This setting can be used to associate entities with each other. At
@@ -595,7 +599,7 @@ APPLICATIONS = [
         providers = [
             
             # The following provider imports single RSS feeds
-            Provider('molly.apps.podcasts.providers.RSSPodcastsProvider',
+            ProviderConf('molly.apps.podcasts.providers.RSSPodcastsProvider',
                 podcasts = [
                     # The feeds to import are specified here in the form:
                     ('bbcmancnews', 'http://downloads.bbc.co.uk/podcasts/manchester/mancnews/rss.xml'),
@@ -629,7 +633,7 @@ APPLICATIONS = [
         
         # This specifies where Molly gets its weather data from. At present,
         # only a BBC Weather RSS feed parser exists
-        provider = Provider('molly.apps.weather.providers.BBCWeatherProvider',
+        provider = ProviderConf('molly.apps.weather.providers.BBCWeatherProvider',
             # This is the BBC location ID, discovered in the same way as
             # described above
             location_id = 9,
@@ -648,7 +652,7 @@ APPLICATIONS = [
             # This provider attempts to do internal search, e.g., by matching
             # names of podcasts, places, etc. This also provides functionality
             # like bus stop code lookup and bus route lookup. It has no options.
-            Provider('molly.apps.search.providers.ApplicationSearchProvider'),
+            ProviderConf('molly.apps.search.providers.ApplicationSearchProvider'),
             
             # This provider allows the site to use an institutional Google
             # Search Appliance, which provides full-text searching over the
@@ -686,7 +690,7 @@ APPLICATIONS = [
         # The providers specify the kind of feeds this feed importer supports
         providers = [
             # Only RSS is supported right now - this has no options
-            Provider('molly.apps.feeds.providers.RSSFeedsProvider'),
+            ProviderConf('molly.apps.feeds.providers.RSSFeedsProvider'),
         ],
         display_to_user = False,
     ),
@@ -723,7 +727,7 @@ APPLICATIONS = [
             # This provider allows people to set their location to be the
             # same as place Molly knows about - this can be a postcode, for
             # example
-            Provider('molly.geolocation.providers.PlacesGeolocationProvider'
+            ProviderConf('molly.geolocation.providers.PlacesGeolocationProvider'
                      
                      # The following setting limits this to certain identifier
                      # namespaces, rather than all namespaces and entity names
@@ -732,7 +736,7 @@ APPLICATIONS = [
             
             # This uses Cloudmade's freeform geocoding API to try and identify
             # user input
-            Provider('molly.geolocation.providers.CloudmadeGeolocationProvider',
+            ProviderConf('molly.geolocation.providers.CloudmadeGeolocationProvider',
                 
                 # When the next option is set, then it is appended to requests
                 # sent to Cloudmade to try and reduce the results Cloudmade
@@ -835,11 +839,17 @@ INSTALLED_APPS = extract_installed_apps(APPLICATIONS) + (
     'django.contrib.sites', # Django's sites API, this is a prerequisite for the comments API
     'django.contrib.gis', # Geodjango - this is required
     'django.contrib.comments', # Django's comments API - used in the feature vote app
-    'molly.batch_processing', # This is a part of Molly that handles the batch jobs
     'django.contrib.staticfiles', # Staticfiles handles media for Molly
     'pipeline', # Compress is an external library that minifies JS and CSS
     'south', # South handles changes to database schema
+    'djcelery', # Celery tasks run our periodic batch processing
 )
+
+BROKER_URL = "amqp://molly:molly@localhost:5672/molly"
+CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
+CELERYD_CONCURRENCY = 1
+CELERY_RETRY_DELAY = 3 * 60
+CELERY_MAX_RETRIES = 3
 
 try:
     from mancunia.settings_local import *
