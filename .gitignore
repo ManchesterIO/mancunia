@@ -3,3 +3,4 @@
 local_secrets.py
 settings_local.py
 cache
+.svn

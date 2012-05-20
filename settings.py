@@ -71,8 +71,7 @@ PIPELINE_CSS_COMPRESSOR = 'molly.utils.compress.MollyCSSFilter'
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.jsmin.JSMinCompressor'
 PIPELINE = not DEBUG
 
-# Make this unique, and don't share it with anybody. It's used to salt passwords
-#SECRET_KEY = SECRETS['key'] # Skipping, because we want to override this in settings_local.py
+SECRET_KEY = local_secrets.SECRET_KEY
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -158,11 +157,10 @@ LOGGING = {
     },
 }
 
-#API_KEYS = {
-#    'cloudmade': SECRETS['cloudmade'],
-#    'google_analytics': SECRETS['google-analytics'],
-#}
-# Skipping this because we should define this in settings_local
+API_KEYS = {
+    'cloudmade': local_secrets.CLOUDMADE,
+    'google_analytics': local_secrets.GOOGLE_ANALYTICS,
+}
 
 APPLICATIONS = [
     
@@ -332,6 +330,8 @@ INSTALLED_APPS = extract_installed_apps(APPLICATIONS) + (
     'south',
     'djcelery',
 )
+
+SENTRY_DSN = local_secrets.SENTRY
 
 try:
     from mancunia.settings_local import *
