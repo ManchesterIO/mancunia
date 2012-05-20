@@ -16,7 +16,16 @@ from oauth.oauth import OAuthSignatureMethod_PLAINTEXT
 import os, os.path, imp
 from molly.conf.settings import Application, extract_installed_apps, Authentication, ExtraBase, ProviderConf
 from molly.utils.media import get_compress_groups
+from molly.conf.celery_util import prepare_celery
 from mancunia import local_secrets
+
+BROKER_URL = "amqp://molly:molly@localhost:5672/molly"
+CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
+CELERYD_CONCURRENCY = 1
+CELERY_RETRY_DELAY = 3 * 60
+CELERY_MAX_RETRIES = 3
+
+prepare_celery()
 
 # The following creates two useful variables - a path to where Molly is
 # installed, and also to the root of where your site is installed. These can be
@@ -844,12 +853,6 @@ INSTALLED_APPS = extract_installed_apps(APPLICATIONS) + (
     'south', # South handles changes to database schema
     'djcelery', # Celery tasks run our periodic batch processing
 )
-
-BROKER_URL = "amqp://molly:molly@localhost:5672/molly"
-CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
-CELERYD_CONCURRENCY = 1
-CELERY_RETRY_DELAY = 3 * 60
-CELERY_MAX_RETRIES = 3
 
 try:
     from mancunia.settings_local import *
