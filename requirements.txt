@@ -2,3 +2,4 @@ molly==1.4
 raven
 gunicorn
 gevent
+supervisor
