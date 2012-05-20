@@ -110,7 +110,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'molly.utils.context_processors.languages',
     'django.core.context_processors.csrf',
 )
-f
+
 ROOT_URLCONF = 'molly.urls'
 
 CSRF_FAILURE_VIEW = 'molly.utils.views.CSRFFailureView'
@@ -329,6 +329,7 @@ INSTALLED_APPS = extract_installed_apps(APPLICATIONS) + (
     'pipeline',
     'south',
     'djcelery',
+    'gunicorn',
 )
 
 SENTRY_DSN = local_secrets.SENTRY
