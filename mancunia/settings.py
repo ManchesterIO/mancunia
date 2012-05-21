@@ -14,7 +14,7 @@ CELERY_MAX_RETRIES = 3
 prepare_celery()
 
 MOLLY_ROOT = imp.find_module('molly')[1]
-PROJECT_ROOT = os.path.normpath(os.path.dirname(__file__))
+PROJECT_ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
 
 DEBUG = True
 DEBUG_SECURE = DEBUG
@@ -50,7 +50,7 @@ LANGUAGES = (
 USE_I18N = True
 USE_L10N = True
 
-MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'site_media')
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'mancunia', 'site_media')
 MEDIA_URL = '/site-media/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'compiled_media/')
 STATIC_URL = '/static/'
@@ -59,7 +59,7 @@ CACHE_DIR = os.path.join(PROJECT_ROOT, 'cache')
 MARKER_DIR = os.path.join(CACHE_DIR, 'markers')
 
 STATICFILES_DIRS = (
-    ('', os.path.join(PROJECT_ROOT, 'site_media')),
+    ('', os.path.join(PROJECT_ROOT, 'mancunia', 'site_media')),
     ('', os.path.join(MOLLY_ROOT, 'media')),
     ('markers', MARKER_DIR),
 )
