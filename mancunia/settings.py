@@ -332,6 +332,8 @@ INSTALLED_APPS = extract_installed_apps(APPLICATIONS) + (
     'gunicorn',
 )
 
+SITE_ID = 1
+
 SENTRY_DSN = local_secrets.SENTRY
 
 try:
